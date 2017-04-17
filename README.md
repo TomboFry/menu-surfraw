@@ -2,7 +2,16 @@
 
 A short little Bash script that uses rofi or dmenu to prompt you for an Elvis and a search term with surfraw.
 
+## Installation
+
+This'll work anywhere. You could place it in `~/.local/bin` or `/usr/bin` and have it built into dmenu, I use it in i3 with this line in my configuration: `bindsym $mod+Mod1+space exec ~/.dotfiles/menu-surfraw`, it's up to you!
+
+## Preview
+
+![Menu Surfraw Preview](https://raw.githubusercontent.com/TomboFry/menu-surfraw/master/preview.gif)
+
 ## Usage
+
 ```
 menu-surfraw [OPTIONS] [ELVIS [SEARCHTERM]]
 
@@ -22,3 +31,7 @@ SEARCHTERM:
 - Dmenu
 - Surfraw
 - Rofi (optional)
+
+## License
+
+Do what you like, this script makes use of Unlicense so it's essentially public domain!
