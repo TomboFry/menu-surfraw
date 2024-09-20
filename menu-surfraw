@@ -6,43 +6,86 @@
 # available elvi to use in surfraw then get the search term afterwards and open
 # it in your browser of choice.
 
-# Edit here to change what browser you open links in
-browser="/usr/bin/firefox"
-
 usage() {
     echo "Usage: $0 [OPTIONS] [ELVIS [SEARCHTERM]]
 
 OPTIONS:
-  -h, --help	Displays this message
+  -h, --help		Displays this message
+  -m, --menu		Select a menu to use. Some of them need the -d or
+                        --dmenu flag. Just add it behind the name.
+                        Example: ./menu-surfraw -m wofi -d -b librewolf
+  -b, --browser 	Select a browser to use.
 
 ELVIS:
     This is the same as surfraw, any Elvi you have installed. Can be left
-    blank, as you will be prompted for this in dmenu/rofi.
+    blank, as you will be prompted for this in the menu.
 
 SEARCHTERM:
     Again, the same as surfraw, the term you are searching for. Can also be
-    left blank as you will be prompted for this in dmenu/rofi."
+    left blank as you will be prompted for this in the menu."
     exit
 }
 
-case $1 in
-    "-h"|"--help") usage ;;
-esac
+# parse flags
+while [[ $# -gt 0 ]]; do
+	case $1 in
+		"-h"|"--help")
+		usage
+		;;
+		"-b"|"--browser")
+		browser="$(command -v $2)"
+		shift 2
+		;;
+		"-m"|"--menu")
+		dflag=2
+		if [ "$3" == "-d" ] || [ "$3" == "-dmenu" ] || [ "$3" == "--dmenu" ]; then
+			dflag=3
+		fi
+		menu="$(command -v $2) $3"
+		shift $dflag
+		;;
+		*)
+		break
+		;;
+    esac
+done
 
 # Path to menu application
-if [[ -n $(command -v rofi) ]]; then
-	menu="$(command -v rofi) -dmenu"
-elif [[ -n $(command -v dmenu) ]]; then
-	menu="$(command -v dmenu)"
-else
-	echo "Rofi or dmenu not found, exiting."
-	exit
+if [[ -z $menu ]]; then
+	if [[ -n $(command -v rofi) ]]; then
+		menu="$(command -v rofi) -dmenu"
+	elif [[ -n $(command -v dmenu) ]]; then
+		menu="$(command -v dmenu)"
+	elif [[ -n $(command -v fuzzel) ]]; then
+		menu="$(command -v fuzzel) -d"
+	elif [[ -n $(command -v wofi) ]]; then
+		menu="$(command -v wofi) -d"
+	elif [[ -n $(command -v bemenu) ]]; then
+		menu="$(command -v bemenu)"
+	else
+		echo "No menu found, please use -m."
+		exit
+	fi
+fi
+
+# Path to browser
+if [[ -z "$browser" ]]; then
+    for b in firefox librewolf qutebrowser vivaldi opera brave chromium-browser google-chrome; do
+        if [[ -n $(command -v "$b") ]]; then
+            browser="$(command -v "$b")"
+            break
+        fi
+    done
+    if [[ -z "$browser" ]]; then
+        echo "No browser found, please use -b."
+        exit
+    fi
 fi
 
 answerA=$(echo "${@:1}")
 answerB=$(echo "${@:2}")
 
-# Change what to display in rofi/dmenu
+# Change what to display in the menu
 # If both the first prompt and second prompt are not empty, it will finally open
 # the search in surfraw
 if [[ -z "$answerA" ]]; then
@@ -57,5 +100,5 @@ fi
 # If you leave the prompt empty it will close, otherwise displaying the prompt.
 case $action in
 	"") ;;
-	*) $0 $answerA $action ;;
+	*) $0 -m  $menu -b $browser $answerA $action ;;
 esac
