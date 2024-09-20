@@ -1,6 +1,6 @@
 # Menu Surfraw
 
-A short little Bash script that uses rofi or dmenu to prompt you for an Elvis and a search term with surfraw.
+A short little Bash script that uses your menu of choice (like rofi or wofi) to prompt you for an Elvis and a search term with surfraw.
 
 ## Installation
 
@@ -16,21 +16,25 @@ This'll work anywhere. You could place it in `~/.local/bin` or `/usr/bin` and ha
 menu-surfraw [OPTIONS] [ELVIS [SEARCHTERM]]
 
 OPTIONS:
-  -h, --help	Displays this message
+  -h, --help		Displays this message
+  -m, --menu		Select a menu to use. Some of them need the -d or
+                        --dmenu flag. Just add it behind the name.
+                        Example: ./menu-surfraw -m wofi -d -b librewolf
+  -b, --browser 	Select a browser to use.
 
 ELVIS:
-    This is the same as surfraw, any Elvis you have installed. Can be left
-    blank, as you will be prompted for this in dmenu/rofi.
+    This is the same as surfraw, any Elvi you have installed. Can be left
+    blank, as you will be prompted for this in the menu.
 
 SEARCHTERM:
     Again, the same as surfraw, the term you are searching for. Can also be
-    left blank as you will be prompted for this in dmenu/rofi.
+    left blank as you will be prompted for this in the menu.
 ```
 ## Dependencies
 
 - Dmenu
 - Surfraw
-- Rofi (optional)
+- Rofi or any other menu (optional)
 
 ## License
 
