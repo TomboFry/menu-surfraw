@@ -1,3 +1,10 @@
+### Project Archived
+
+> [!NOTE]
+> I haven't used Arch, i3, or anything related to this project for several years now. As such, I've archived this repo. If you'd like to contribute to this project please support one of the forks, or create your own! ❤
+
+---
+
 # Menu Surfraw
 
 A short little Bash script that uses rofi or dmenu to prompt you for an Elvis and a search term with surfraw.
